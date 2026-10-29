@@ -132,7 +132,7 @@
         </button>
       </div>
 
-      <!-- Overlay Pantalla Fin de Juego (Victoria / Game Over) acotada estrictamente al área del Canvas -->
+      <!-- Overlay Pantalla Fin de Juego (Victoria / Game Over) acotada strictly al área del Canvas -->
       <div id="end-overlay" class="hidden absolute inset-0 bg-black/95 flex flex-col items-center justify-center p-3 z-40 text-center gap-2 overflow-y-auto">
         <div class="w-full flex flex-col items-center">
           <h2 id="end-title" class="text-lg sm:text-xl text-yellow-400 glow-text mb-0.5">¡VICTORIA!</h2>
@@ -156,36 +156,43 @@
       </div>
     </div>
 
-    <!-- Controles Táctiles (Botonera Horizontal Neón Cyberpunk Proporcional) -->
-    <div class="w-full flex items-center justify-center pt-2 pb-1 z-10 shrink-0 px-3">
-      <div class="flex w-full max-w-sm justify-between items-center gap-2">
+    <!-- Controles Táctiles (Cruceta D-Pad Tradicional Neón) -->
+    <div class="w-full flex items-center justify-center pt-1 pb-1 z-10 shrink-0">
+      <div class="grid grid-cols-3 gap-1.5 w-36 h-36 sm:w-40 sm:h-40">
+        <div></div>
+        <!-- ARRIBA -->
+        <button id="btn-up" class="neon-btn text-cyan-400 rounded-xl flex items-center justify-center">
+          <svg class="w-6 h-6 drop-shadow-[0_0_6px_currentColor]" fill="currentColor" viewBox="0 0 24 24">
+            <path d="M7.41 15.41L12 10.83l4.59 4.58L18 14l-6-6-6 6 1.41 1.41z"/>
+          </svg>
+        </button>
+        <div></div>
+
         <!-- IZQUIERDA -->
-        <button id="btn-left" class="flex-1 h-14 sm:h-16 neon-btn text-cyan-400 font-extrabold text-2xl rounded-xl flex items-center justify-center">
-          <svg class="w-7 h-7 drop-shadow-[0_0_6px_currentColor]" fill="currentColor" viewBox="0 0 24 24">
+        <button id="btn-left" class="neon-btn text-cyan-400 rounded-xl flex items-center justify-center">
+          <svg class="w-6 h-6 drop-shadow-[0_0_6px_currentColor]" fill="currentColor" viewBox="0 0 24 24">
             <path d="M15.41 16.59L10.83 12l4.58-4.59L14 6l-6 6 6 6 1.41-1.41z"/>
           </svg>
         </button>
 
-        <!-- ABAJO -->
-        <button id="btn-down" class="flex-1 h-14 sm:h-16 neon-btn text-cyan-400 font-extrabold text-2xl rounded-xl flex items-center justify-center">
-          <svg class="w-7 h-7 drop-shadow-[0_0_6px_currentColor]" fill="currentColor" viewBox="0 0 24 24">
-            <path d="M7.41 8.59L12 13.17l4.59-4.58L18 10l-6 6-6-6 1.41-1.41z"/>
-          </svg>
-        </button>
-
-        <!-- ARRIBA -->
-        <button id="btn-up" class="flex-1 h-14 sm:h-16 neon-btn text-cyan-400 font-extrabold text-2xl rounded-xl flex items-center justify-center">
-          <svg class="w-7 h-7 drop-shadow-[0_0_6px_currentColor]" fill="currentColor" viewBox="0 0 24 24">
-            <path d="M7.41 15.41L12 10.83l4.59 4.58L18 14l-6-6-6 6 1.41 1.41z"/>
-          </svg>
-        </button>
+        <!-- CENTRO DECORATIVO -->
+        <div class="bg-gray-950/80 rounded-xl border border-cyan-500/30 flex items-center justify-center text-xs shadow-inner">🎮</div>
 
         <!-- DERECHA -->
-        <button id="btn-right" class="flex-1 h-14 sm:h-16 neon-btn text-cyan-400 font-extrabold text-2xl rounded-xl flex items-center justify-center">
-          <svg class="w-7 h-7 drop-shadow-[0_0_6px_currentColor]" fill="currentColor" viewBox="0 0 24 24">
+        <button id="btn-right" class="neon-btn text-cyan-400 rounded-xl flex items-center justify-center">
+          <svg class="w-6 h-6 drop-shadow-[0_0_6px_currentColor]" fill="currentColor" viewBox="0 0 24 24">
             <path d="M8.59 16.59L13.17 12 8.59 7.41 10 6l6 6-6 6-1.41-1.41z"/>
           </svg>
         </button>
+
+        <div></div>
+        <!-- ABAJO -->
+        <button id="btn-down" class="neon-btn text-cyan-400 rounded-xl flex items-center justify-center">
+          <svg class="w-6 h-6 drop-shadow-[0_0_6px_currentColor]" fill="currentColor" viewBox="0 0 24 24">
+            <path d="M7.41 8.59L12 13.17l4.59-4.58L18 10l-6 6-6-6 1.41-1.41z"/>
+          </svg>
+        </button>
+        <div></div>
       </div>
     </div>
 
