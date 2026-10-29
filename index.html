@@ -84,7 +84,7 @@
     <!-- Encabezado y Marcador ajustado sin márgenes sobrantes -->
     <div class="w-full flex items-center justify-between px-3 py-1 bg-gray-900/90 border-2 border-blue-600 rounded-xl mb-0.5 z-10 shrink-0">
       <div class="text-left">
-        <span class="text-[8px] sm:text-[9px] text-gray-400 block tracking-tight">KIKE 50º</span>
+        <span class="text-[8px] sm:text-[9px] text-gray-400 block tracking-tight">KIKE 50s</span>
         <span class="text-[10px] sm:text-xs text-yellow-400 font-bold">PTS: <span id="score-val">0</span></span>
       </div>
 
@@ -142,12 +142,13 @@
           </div>
         </div>
 
-        <div id="info-box" class="w-full max-w-xs p-1.5 bg-gray-900 border border-yellow-400 rounded-lg text-left space-y-0.5 text-[7px] leading-tight">
-          <p class="text-yellow-300 font-bold text-center text-[8px] mb-0.5">📍 DATOS DE LA FIESTA 📍</p>
-          <p>📅 <strong>Fecha:</strong> Sábado, 50 Aniversario</p>
-          <p>⏰ <strong>Hora:</strong> 21:00h</p>
-          <p>🏢 <strong>Lugar Secreto:</strong> Sala VIP Club Arcade</p>
-          <p>👗 <strong>Dress Code:</strong> Retro / Ochentero</p>
+        <div id="info-box" class="w-full max-w-xs p-1.5 bg-gray-900 border border-yellow-400 rounded-lg text-left space-y-0.5 text-[10px] leading-tight">
+          <p class="text-yellow-300 font-bold text-center text-[11px] mb-0.5">📍 DATOS DE LA FIESTA 📍</p>
+          <p>📅 <strong>Fecha:</strong> Sábado, 14 NOV</p>
+          <p>⏰ <strong>Hora:</strong> 21:30h</p>
+          <p>🏢 <strong>Lugar:</strong> C/ Eguilaz 10 </p>
+          <p class="text-center"><strong>METRO BILBAO</strong></p>
+          <p class="text-center">No dress code </p>
         </div>
 
         <button id="restart-btn" class="w-full max-w-xs py-2 bg-yellow-400 text-black font-bold text-xs rounded-lg retro-btn glow-text">
@@ -852,8 +853,8 @@
         endTitle.className = 'text-lg sm:text-xl text-yellow-400 glow-text mb-0.5';
         endIcon.textContent = '🎉🍻🕺';
         endSubtitleContainer.className = 'my-0.5 p-1.5 bg-green-950/80 border border-green-500/80 rounded-lg w-full max-w-xs shadow-lg';
-        endSubtitle.textContent = '¡BRUTAL KIKE! HAS ESCAPADO CON TU CERVEZA Y DESBLOQUEADO LA CELEBRACIÓN DE TUS 50';
-        endSubtitle.className = 'text-[7.5px] sm:text-[8.5px] text-green-300 leading-tight font-bold tracking-wide';
+        endSubtitle.textContent = '¡BRUTAL! HAS ESCAPADO CON TU CERVEZA Y ENCONTRADO EL BAR CORRECTO PARA LA CELEBRACIÓN!!';
+        endSubtitle.className = 'text-[10.5px] sm:text-[11.5px] text-green-300 leading-tight font-bold tracking-wide';
         infoBox.classList.remove('hidden');
       } else {
         playSadGameOverMelody(); // Melodía triste de derrota cuando atrapan a Kike
