@@ -21,129 +21,138 @@
       box-sizing: border-box;
     }
 
-    body {
-      font-family: 'Press Start 2P', monospace;
-      background-color: #000000;
-      color: #fff;
-      overflow: hidden;
+    html, body {
+      width: 100%;
+      height: 100%;
+      height: 100dvh; /* Soporte para viewports dinámicos en móviles */
       margin: 0;
       padding: 0;
-      width: 100vw;
-      height: 100vh;
+      overflow: hidden;
+      background-color: #000000;
+      color: #fff;
+      font-family: 'Press Start 2P', monospace;
     }
 
-    /* Temas de Paleta */
-    body.theme-classic #game-container {
-      background-color: #000000;
+    /* Respetar las safe areas de iPhone reduciendo el padding al mínimo */
+    .safe-padding {
+      padding-top: max(0.25rem, env(safe-area-inset-top));
+      padding-bottom: max(0.25rem, env(safe-area-inset-bottom));
+      padding-left: max(0.25rem, env(safe-area-inset-left));
+      padding-right: max(0.25rem, env(safe-area-inset-right));
     }
 
     .retro-btn {
-      box-shadow: 0 4px 0 #999, 0 8px 10px rgba(0,0,0,0.5);
-      transition: transform 0.1s, box-shadow 0.1s;
+      box-shadow: 0 3px 0 #666, 0 4px 6px rgba(0,0,0,0.5);
+      transition: transform 0.05s, box-shadow 0.05s;
     }
 
     .retro-btn:active {
-      transform: translateY(4px);
-      box-shadow: 0 0 0 #999, 0 2px 5px rgba(0,0,0,0.5);
+      transform: translateY(2px);
+      box-shadow: 0 1px 0 #666, 0 1px 2px rgba(0,0,0,0.5);
     }
 
     .glow-text {
       text-shadow: 0 0 8px currentColor;
     }
+
+    /* Prevenir scroll rebotado en iOS */
+    .no-scroll {
+      overscroll-behavior: none;
+    }
   </style>
 </head>
-<body class="theme-classic flex flex-col items-center justify-between min-h-screen">
+<body class="no-scroll flex flex-col items-center justify-center">
 
-  <div id="game-container" class="relative w-full max-w-md h-full flex flex-col items-center justify-between p-2 mx-auto transition-colors duration-300">
+  <div id="game-container" class="safe-padding relative w-full max-w-sm h-full flex flex-col items-center justify-start mx-auto transition-colors duration-300 gap-0">
     
-    <!-- Encabezado y Marcador -->
-    <div class="w-full flex items-center justify-between px-3 py-2 bg-gray-900/90 border-2 border-blue-600 rounded-xl mb-1 z-10">
+    <!-- Encabezado y Marcador ajustado sin márgenes sobrantes -->
+    <div class="w-full flex items-center justify-between px-3 py-1 bg-gray-900/90 border-2 border-blue-600 rounded-xl mb-0.5 z-10 shrink-0">
       <div class="text-left">
-        <span class="text-[9px] text-gray-400 block">KIKE 50º</span>
-        <span class="text-xs text-yellow-400 font-bold">PTS: <span id="score-val">0</span></span>
+        <span class="text-[8px] sm:text-[9px] text-gray-400 block tracking-tight">KIKE 50º</span>
+        <span class="text-[10px] sm:text-xs text-yellow-400 font-bold">PTS: <span id="score-val">0</span></span>
       </div>
 
-      <div class="flex items-center gap-2">
-        <div id="beer-indicator" class="flex items-center gap-1 px-2 py-1 bg-gray-800 rounded-lg opacity-40 transition-opacity">
+      <div class="flex items-center gap-1.5">
+        <div id="beer-indicator" class="flex items-center gap-1 px-2 py-0.5 bg-gray-800 rounded-lg opacity-40 transition-opacity">
           <span class="text-xs">🍺</span>
-          <span id="beer-count" class="text-[10px] text-yellow-400 font-bold ml-1">x0</span>
+          <span id="beer-count" class="text-[10px] text-yellow-400 font-bold">x0</span>
         </div>
-        <button id="mute-btn" class="p-2 bg-gray-800 hover:bg-gray-700 text-xs rounded-lg border border-gray-600">
+        <button id="mute-btn" class="p-1 bg-gray-800 active:bg-gray-700 text-xs rounded-lg border border-gray-600">
           🔊
         </button>
       </div>
     </div>
 
-    <!-- Contenedor del Canvas -->
-    <div class="relative flex-1 w-full flex items-center justify-center my-1 overflow-hidden rounded-xl border-2 border-blue-700 bg-black">
+    <!-- Contenedor del Canvas Adaptativo (Ajustado exactamente al alto del Canvas sin huecos verticales) -->
+    <div class="relative shrink-0 flex items-center justify-center my-0 overflow-hidden rounded-xl border-2 border-blue-700 bg-black">
       <canvas id="gameCanvas" class="block rounded-lg shadow-2xl"></canvas>
 
       <!-- Modal Puerta Errónea -->
-      <div id="wrong-exit-modal" class="hidden absolute inset-x-4 top-1/2 -translate-y-1/2 p-4 bg-red-950/95 border-2 border-red-500 rounded-xl text-center z-30 shadow-2xl">
-        <div class="text-3xl mb-2">🚫</div>
-        <h3 class="text-xs text-yellow-300 font-bold mb-3 leading-relaxed">¡POR AQUÍ NO ES LA FIESTA DE KIKE!</h3>
-        <button id="close-wrong-exit" class="px-4 py-2 bg-yellow-400 text-black text-[10px] font-bold rounded-lg retro-btn">
+      <div id="wrong-exit-modal" class="hidden absolute inset-x-3 top-1/2 -translate-y-1/2 p-3 bg-red-950/95 border-2 border-red-500 rounded-xl text-center z-30 shadow-2xl max-w-[90%] mx-auto">
+        <div id="wrong-exit-icon" class="text-2xl mb-1">🍺</div>
+        <h3 id="wrong-exit-msg" class="text-[9px] sm:text-xs text-yellow-300 font-bold mb-2 leading-relaxed">¡TIENES QUE LLEVAR AL MENOS UNA CERVEZA A LA FIESTA!</h3>
+        <button id="close-wrong-exit" class="px-3 py-1.5 bg-yellow-400 text-black text-[9px] font-bold rounded-lg retro-btn">
           ENTENDIDO 🆗
         </button>
       </div>
     </div>
 
-    <!-- Controles Táctiles (D-Pad Flotante para Móvil) -->
-    <div class="w-full flex items-center justify-center p-2 z-10">
-      <div class="grid grid-cols-3 gap-2 w-48 h-48">
+    <!-- Controles Táctiles (D-Pad Trazado Compacto Tocado al Canvas) -->
+    <div class="w-full flex items-center justify-center pt-1 z-10 shrink-0">
+      <div class="grid grid-cols-3 gap-1 w-32 h-32 sm:w-40 sm:h-40">
         <div></div>
-        <button id="btn-up" class="bg-blue-600 active:bg-blue-800 text-white font-bold text-xl rounded-2xl flex items-center justify-center retro-btn">▲</button>
+        <button id="btn-up" class="bg-blue-600 active:bg-blue-800 text-white font-bold text-base sm:text-lg rounded-lg flex items-center justify-center retro-btn">▲</button>
         <div></div>
-        <button id="btn-left" class="bg-blue-600 active:bg-blue-800 text-white font-bold text-xl rounded-2xl flex items-center justify-center retro-btn">◄</button>
-        <div class="bg-gray-900 rounded-2xl border-2 border-blue-500/30 flex items-center justify-center text-xs">🎮</div>
-        <button id="btn-right" class="bg-blue-600 active:bg-blue-800 text-white font-bold text-xl rounded-2xl flex items-center justify-center retro-btn">►</button>
+        <button id="btn-left" class="bg-blue-600 active:bg-blue-800 text-white font-bold text-base sm:text-lg rounded-lg flex items-center justify-center retro-btn">◄</button>
+        <div class="bg-gray-900 rounded-lg border border-blue-500/30 flex items-center justify-center text-[9px]">🎮</div>
+        <button id="btn-right" class="bg-blue-600 active:bg-blue-800 text-white font-bold text-base sm:text-lg rounded-lg flex items-center justify-center retro-btn">►</button>
         <div></div>
-        <button id="btn-down" class="bg-blue-600 active:bg-blue-800 text-white font-bold text-xl rounded-2xl flex items-center justify-center retro-btn">▼</button>
+        <button id="btn-down" class="bg-blue-600 active:bg-blue-800 text-white font-bold text-base sm:text-lg rounded-lg flex items-center justify-center retro-btn">▼</button>
         <div></div>
       </div>
     </div>
 
     <!-- Overlay Pantalla de Inicio -->
-    <div id="start-overlay" class="absolute inset-0 bg-black/95 flex flex-col items-center justify-between p-6 z-40 text-center overflow-y-auto">
-      <div class="mt-4">
-        <h1 class="text-2xl text-yellow-400 glow-text mb-2">KIKE 50th</h1>
-        <p class="text-[10px] text-blue-400 tracking-widest">ANNIVERSARY ARCADE</p>
+    <div id="start-overlay" class="absolute inset-0 bg-black/95 flex flex-col items-center justify-around p-4 z-40 text-center safe-padding">
+      <div class="mt-2">
+        <h1 class="text-xl sm:text-2xl text-yellow-400 glow-text mb-1">KIKE 50th</h1>
+        <p class="text-[8px] sm:text-[10px] text-blue-400 tracking-widest">ANNIVERSARY ARCADE</p>
       </div>
 
       <!-- Avatar Preview -->
-      <div class="my-2 p-3 bg-gray-900/80 border-2 border-yellow-500/50 rounded-xl max-w-xs">
-        <div class="text-4xl mb-2">👨‍🦲🍺</div>
-        <p class="text-[9px] text-gray-300 leading-relaxed">
-          ¡Consigue al menos 1 <span class="text-yellow-400">cerveza 🍺</span> para animar a Kike y huye de los <span class="text-blue-400">policías 👮</span> por la salida correcta de la fiesta!
+      <div class="my-1 p-2.5 bg-gray-900/90 border-2 border-yellow-500/50 rounded-xl w-full max-w-xs">
+        <div class="text-3xl mb-1">👨‍🦲🍺</div>
+        <p class="text-[8px] sm:text-[9px] text-gray-300 leading-relaxed">
+          ¡Consigue al menos 1 <span class="text-yellow-400">cerveza 🍺</span> para animar a Kike y huye de los <span class="text-blue-400">policías 👮</span> por la salida correcta!
         </p>
       </div>
 
-      <button id="start-game-btn" class="w-full max-w-xs py-4 bg-yellow-400 text-black font-bold text-sm rounded-xl retro-btn glow-text animate-pulse">
+      <button id="start-game-btn" class="w-full max-w-xs py-3.5 bg-yellow-400 text-black font-bold text-xs sm:text-sm rounded-xl retro-btn glow-text animate-pulse">
         ¡EMPEZAR FIESTA!
       </button>
     </div>
 
     <!-- Overlay Pantalla Fin de Juego (Victoria / Game Over) -->
-    <div id="end-overlay" class="hidden absolute inset-0 bg-black/95 flex flex-col items-center justify-between p-6 z-40 text-center overflow-y-auto">
-      <div class="mt-4">
-        <h2 id="end-title" class="text-2xl text-yellow-400 glow-text mb-2">¡VICTORIA!</h2>
-        <!-- Contenedor del mensaje dinamico con efectos -->
-        <div id="end-subtitle-container" class="my-3 p-3 bg-red-950/80 border-2 border-red-500/80 rounded-xl max-w-xs shadow-lg animate-pulse">
-          <div id="end-icon" class="text-4xl mb-2">🚨👮‍♂️🚔</div>
-          <p id="end-subtitle" class="text-[10px] text-red-400 leading-relaxed font-bold tracking-wider"></p>
+    <div id="end-overlay" class="hidden absolute inset-0 bg-black/95 flex flex-col items-center justify-between p-4 z-40 text-center overflow-y-auto safe-padding">
+      <div class="mt-2 w-full flex flex-col items-center">
+        <h2 id="end-title" class="text-xl sm:text-2xl text-yellow-400 glow-text mb-1">¡VICTORIA!</h2>
+        <!-- Contenedor del mensaje dinámico con efectos -->
+        <div id="end-subtitle-container" class="my-2 p-2.5 bg-red-950/80 border-2 border-red-500/80 rounded-xl w-full max-w-xs shadow-lg">
+          <div id="end-icon" class="text-3xl mb-1">🚨👮‍♂️🚔</div>
+          <p id="end-subtitle" class="text-[8px] sm:text-[9px] text-red-400 leading-relaxed font-bold tracking-wider"></p>
         </div>
       </div>
 
-      <div id="info-box" class="w-full max-w-xs p-4 bg-gray-900 border-2 border-yellow-400 rounded-xl text-left space-y-2 text-[9px] leading-relaxed">
-        <p class="text-yellow-300 font-bold text-center text-xs mb-2">📍 DATOS DE LA FIESTA 📍</p>
+      <div id="info-box" class="w-full max-w-xs p-3 bg-gray-900 border-2 border-yellow-400 rounded-xl text-left space-y-1.5 text-[8px] sm:text-[9px] leading-relaxed my-1">
+        <p class="text-yellow-300 font-bold text-center text-[10px] mb-1">📍 DATOS DE LA FIESTA 📍</p>
         <p>📅 <strong>Fecha:</strong> Sábado, 50 Aniversario</p>
         <p>⏰ <strong>Hora:</strong> 21:00h</p>
         <p>🏢 <strong>Lugar Secreto:</strong> Sala VIP Club Arcade</p>
         <p>👗 <strong>Dress Code:</strong> Ochentero / Retro</p>
-        <p class="text-gray-400 text-[8px] pt-2 text-center">¡Prepara las ganas de celebrar!</p>
+        <p class="text-gray-400 text-[7px] pt-1 text-center">¡Prepara las ganas de celebrar!</p>
       </div>
 
-      <button id="restart-btn" class="w-full max-w-xs py-4 bg-yellow-400 text-black font-bold text-sm rounded-xl retro-btn glow-text">
+      <button id="restart-btn" class="w-full max-w-xs py-3 bg-yellow-400 text-black font-bold text-xs sm:text-sm rounded-xl retro-btn glow-text my-1">
         VOLVER A JUGAR 🔄
       </button>
     </div>
@@ -155,15 +164,6 @@
     const GRID_SIZE = 15;
     let tileSize = 20;
 
-    // Mapa centrado con las puertas 1 y 3 desplazadas 2 casillas a la izquierda para centrar exactamente la salida
-    // BAR 1: Fila 0 -> Cols 2-7: B(10), A(11), R(12), Espacio, 1(13), Puerta(8/9) en Col 7
-    // BAR 2: Columna 14 -> Filas 2-7: B(10), A(11), R(12), Espacio, 2(14), Puerta(8/9)
-    // BAR 3: Fila 14 -> Cols 2-7: B(10), A(11), R(12), Espacio, 3(15), Puerta(8/9) en Col 7
-    // BAR 4: Columna 0 -> Filas 2-7: B(10), A(11), R(12), Espacio, 4(16), Puerta(8/9)
-    // Leyenda:
-    // 0: Moneda, 1: Pared azul, 2: Super píldora, 3: Cerveza, 4: Pasillo limpio
-    // 7: Comisaría interior, 8/9: Puertas de salida
-    // 10: "B", 11: "A", 12: "R", 13: "1", 14: "2", 15: "3", 16: "4"
     const initialMap = [
       [1, 1, 10, 11, 12, 1, 13, 8, 1, 1, 1, 1, 1, 1, 1],
       [1, 3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3, 1],
@@ -195,6 +195,8 @@
     const endTitle = document.getElementById('end-title');
     const endSubtitle = document.getElementById('end-subtitle');
     const wrongExitModal = document.getElementById('wrong-exit-modal');
+    const wrongExitIcon = document.getElementById('wrong-exit-icon');
+    const wrongExitMsg = document.getElementById('wrong-exit-msg');
     const muteBtn = document.getElementById('mute-btn');
 
     // Estado de Audio
@@ -249,7 +251,7 @@
         const gain = audioCtx.createGain();
         osc.type = type;
         osc.frequency.setValueAtTime(freq, audioCtx.currentTime);
-        gain.gain.setValueAtTime(0.1, audioCtx.currentTime);
+        gain.gain.setValueAtTime(0.08, audioCtx.currentTime);
         gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + duration);
         osc.connect(gain);
         gain.connect(audioCtx.destination);
@@ -277,20 +279,23 @@
       }
     }
 
+    // Ajuste dinámico de pantalla optimizado para eliminar huecos verticales arriba y abajo
     function resizeCanvas() {
-      const container = canvas.parentElement;
-      const size = Math.min(container.clientWidth - 16, container.clientHeight - 16);
+      const container = document.getElementById('game-container');
+      const maxW = container.clientWidth - 16;
+      
+      // Calculate available height taking headers and controls into account
+      const headerH = document.querySelector('#game-container > div:first-child')?.offsetHeight || 40;
+      const controlsH = document.querySelector('#game-container > div:nth-child(3)')?.offsetHeight || 130;
+      const maxH = window.innerHeight - headerH - controlsH - 24;
+
+      const size = Math.max(180, Math.min(maxW, maxH));
       canvas.width = size;
       canvas.height = size;
       tileSize = size / GRID_SIZE;
     }
 
     function randomizeExits() {
-      // Definir las posiciones de las 4 puertas de salida centradas:
-      // Puerta 1 (Arriba): Fila 0, Columna 7 (Columna exactamente central)
-      // Puerta 2 (Derecha): Fila 7, Columna 14
-      // Puerta 3 (Abajo): Fila 14, Columna 7 (Columna exactamente central)
-      // Puerta 4 (Izquierda): Fila 7, Columna 0
       const exitPositions = [
         { r: 0, c: 7 },
         { r: 7, c: 14 },
@@ -310,14 +315,12 @@
     function isWalkableTile(r, c) {
       if (r < 0 || r >= GRID_SIZE || c < 0 || c >= GRID_SIZE) return false;
       const tile = grid[r][c];
-      // Las paredes (1) y los bloques de letras/números (10 a 16) no son caminables
       return tile !== 1 && (tile < 10 || tile > 16);
     }
 
     function isWalkablePolice(r, c) {
       if (r <= 0 || r >= GRID_SIZE - 1 || c <= 0 || c >= GRID_SIZE - 1) return false;
       const tile = grid[r][c];
-      // Las paredes (1) y los bloques de letras/números (10 a 16) no son caminables
       return tile !== 1 && (tile < 10 || tile > 16);
     }
 
@@ -453,17 +456,34 @@
             scoreVal.textContent = score;
             playSound(1200, 0.3);
           } else if (tile === 8 || tile === 9) {
-            if (!player.hasBeer || tile === 8) {
+            if (!player.hasBeer) {
+              // Sin cerveza: Mensaje obligatorio de traer al menos una cerveza
               player.dirX = 0;
               player.dirY = 0;
               player.nextDirX = 0;
               player.nextDirY = 0;
               
-              // Pausar juego y música para leer el aviso
+              if (wrongExitIcon) wrongExitIcon.textContent = '🍺❌';
+              if (wrongExitMsg) wrongExitMsg.textContent = '¡TIENES QUE LLEVAR AL MENOS UNA CERVEZA A LA FIESTA!';
+
+              isGameRunning = false;
+              stopMusic();
+              wrongExitModal.classList.remove('hidden');
+            } else if (tile === 8) {
+              // Con cerveza pero puerta incorrecta
+              player.dirX = 0;
+              player.dirY = 0;
+              player.nextDirX = 0;
+              player.nextDirY = 0;
+              
+              if (wrongExitIcon) wrongExitIcon.textContent = '🚫';
+              if (wrongExitMsg) wrongExitMsg.textContent = '¡POR AQUÍ NO ES LA FIESTA DE KIKE!';
+
               isGameRunning = false;
               stopMusic();
               wrongExitModal.classList.remove('hidden');
             } else if (tile === 9) {
+              // Con cerveza y puerta correcta: Victoria
               triggerEndGame(true);
             }
           }
@@ -477,9 +497,7 @@
         }
 
         if (!p.isMoving) {
-          // Lógica de salida de la comisaría
           if (p.gridY >= 6 && p.gridY <= 7 && p.gridX >= 6 && p.gridX <= 8) {
-            // Mover hacia la puerta superior en (5,7)
             if (p.gridX < 7) {
               p.dirX = 1; p.dirY = 0;
             } else if (p.gridX > 7) {
@@ -534,11 +552,9 @@
           }
         }
 
-        // Detección de colisiones
         const dist = Math.hypot(player.x - p.x, player.y - p.y);
         if (dist < 0.6) {
           if (frightenedTimer > 0) {
-            // Comer policía
             p.gridX = 7;
             p.gridY = 6;
             p.x = 7;
@@ -551,7 +567,6 @@
             scoreVal.textContent = score;
             playSound(800, 0.2);
           } else {
-            // Derrota
             triggerEndGame(false);
           }
         }
@@ -561,22 +576,19 @@
     function render() {
       ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-      // Dibujar Mapa
       for (let r = 0; r < GRID_SIZE; r++) {
         for (let c = 0; c < GRID_SIZE; c++) {
           const tile = grid[r][c];
           const x = c * tileSize;
           const y = r * tileSize;
 
-          if (tile === 1 || (tile >= 10 && tile <= 16)) { // Paredes y Bloques de Texto
-            // Mismo color y estilo que los bloques normales de pared
+          if (tile === 1 || (tile >= 10 && tile <= 16)) {
             ctx.fillStyle = '#1e3a8a';
             ctx.fillRect(x + 1, y + 1, tileSize - 2, tileSize - 2);
             ctx.strokeStyle = '#3b82f6';
             ctx.lineWidth = 1.5;
             ctx.strokeRect(x + 2, y + 2, tileSize - 4, tileSize - 4);
 
-            // Si es bloque de letra/número, dibujar la letra encima
             if (tile >= 10 && tile <= 16) {
               let char = '';
               if (tile === 10) char = 'B';
@@ -588,81 +600,69 @@
               else if (tile === 16) char = '4';
 
               ctx.font = `bold ${tileSize * 0.55}px sans-serif`;
-              ctx.fillStyle = '#facc15'; // Texto amarillo sobre fondo azul
+              ctx.fillStyle = '#facc15';
               ctx.textAlign = 'center';
               ctx.textBaseline = 'middle';
               ctx.fillText(char, x + tileSize / 2, y + tileSize / 2 + 1);
             }
-          } else if (tile === 0) { // Monedas
+          } else if (tile === 0) {
             ctx.fillStyle = '#facc15';
             ctx.beginPath();
             ctx.arc(x + tileSize / 2, y + tileSize / 2, tileSize * 0.12, 0, Math.PI * 2);
             ctx.fill();
-          } else if (tile === 2) { // Super Píldora
+          } else if (tile === 2) {
             ctx.fillStyle = '#f43f5e';
             ctx.beginPath();
             ctx.arc(x + tileSize / 2, y + tileSize / 2, tileSize * 0.28, 0, Math.PI * 2);
             ctx.fill();
-          } else if (tile === 3) { // Cerveza 🍺
+          } else if (tile === 3) {
             ctx.font = `${tileSize * 0.7}px sans-serif`;
             ctx.textAlign = 'center';
             ctx.textBaseline = 'middle';
             ctx.fillText('🍺', x + tileSize / 2, y + tileSize / 2 + 1);
-          } else if (tile === 8 || tile === 9) { // Puertas de salida estilo Discoteca
-            // Fondo de entrada a la discoteca (Azul Noche / Violeta)
+          } else if (tile === 8 || tile === 9) {
             ctx.fillStyle = '#090514';
             ctx.fillRect(x + 1, y + 1, tileSize - 2, tileSize - 2);
 
-            // Borde / Marco Neón Neón Neón
-            ctx.strokeStyle = '#ec4899'; // Neón Rosa
+            ctx.strokeStyle = '#ec4899';
             ctx.lineWidth = Math.max(1, tileSize * 0.08);
             ctx.strokeRect(x + 2, y + 2, tileSize - 4, tileSize - 4);
 
-            // Luz/Cartel de Neón superior de la discoteca
-            ctx.fillStyle = '#06b6d4'; // Cian Neón
+            ctx.fillStyle = '#06b6d4';
             ctx.fillRect(x + 3, y + 3, tileSize - 6, Math.max(2, tileSize * 0.15));
 
-            // Puertas dobles de cristal de la discoteca
             const doorMargin = Math.max(3, tileSize * 0.18);
             const doorW = (tileSize - doorMargin * 2 - 2) / 2;
             const doorH = tileSize - doorMargin - (tileSize * 0.22);
             const doorY = y + (tileSize * 0.22);
 
-            // Hoja Izquierda de Cristal
             ctx.fillStyle = 'rgba(56, 189, 248, 0.45)';
             ctx.fillRect(x + doorMargin, doorY, doorW, doorH);
             ctx.strokeStyle = '#38bdf8';
             ctx.lineWidth = 1;
             ctx.strokeRect(x + doorMargin, doorY, doorW, doorH);
 
-            // Hoja Derecha de Cristal
             ctx.fillStyle = 'rgba(56, 189, 248, 0.45)';
             ctx.fillRect(x + doorMargin + doorW + 2, doorY, doorW, doorH);
             ctx.strokeRect(x + doorMargin + doorW + 2, doorY, doorW, doorH);
 
-            // Tiradores/Manillas verticales de acero inoxidable de la discoteca
             ctx.fillStyle = '#f8fafc';
             const handleH = doorH * 0.4;
             const handleY = doorY + (doorH - handleH) / 2;
             
-            // Tirador Izquierdo
             ctx.fillRect(x + doorMargin + doorW - 2, handleY, 1.5, handleH);
-            // Tirador Derecho
             ctx.fillRect(x + doorMargin + doorW + 2.5, handleY, 1.5, handleH);
           }
         }
       }
 
-      // Dibujar a Kike
       const px = player.x * tileSize + tileSize / 2;
       const py = player.y * tileSize + tileSize / 2;
       ctx.font = `${tileSize * 0.85}px sans-serif`;
       ctx.textAlign = 'center';
       ctx.textBaseline = 'middle';
-      // Cambiar el sprite de Kike si tiene la cerveza
       ctx.fillText(player.hasBeer ? '🥳' : '👨‍🦲', px, py);
 
-      // Dibujar Policías
       policeEnemies.forEach(p => {
         const ex = p.x * tileSize + tileSize / 2;
         const ey = p.y * tileSize + tileSize / 2;
@@ -672,7 +672,6 @@
         ctx.textBaseline = 'middle';
 
         if (frightenedTimer > 0) {
-          // Si quedan 3 segundos o menos, alternar rápidamente entre fantasma y policía para advertir
           if (frightenedTimer <= 3.0) {
             const flashState = Math.floor(frightenedTimer * 8) % 2 === 0;
             ctx.fillText(flashState ? '👻' : '👮', ex, ey);
@@ -696,27 +695,26 @@
       if (isWin) {
         playSound(880, 0.4);
         endTitle.textContent = '¡VICTORIA!';
-        endTitle.className = 'text-2xl text-yellow-400 glow-text mb-2';
+        endTitle.className = 'text-xl sm:text-2xl text-yellow-400 glow-text mb-1';
         endIcon.textContent = '🎉🍻🕺';
-        endSubtitleContainer.className = 'my-3 p-3 bg-green-950/80 border-2 border-green-500/80 rounded-xl max-w-xs shadow-lg';
+        endSubtitleContainer.className = 'my-2 p-2.5 bg-green-950/80 border-2 border-green-500/80 rounded-xl w-full max-w-xs shadow-lg';
         endSubtitle.textContent = '¡BRUTAL KIKE! HAS ESCAPADO CON TU CERVEZA Y DESBLOQUEADO LA CELEBRACIÓN DE TUS 50';
-        endSubtitle.className = 'text-[10px] text-green-300 leading-relaxed font-bold tracking-wide';
-        infoBox.classList.remove('hidden'); // Mostrar los datos de la fiesta únicamente al ganar
+        endSubtitle.className = 'text-[8px] sm:text-[9px] text-green-300 leading-relaxed font-bold tracking-wide';
+        infoBox.classList.remove('hidden');
       } else {
         playSound(150, 0.5);
         endTitle.textContent = 'GAME OVER';
-        endTitle.className = 'text-2xl text-red-500 glow-text mb-2 animate-bounce';
+        endTitle.className = 'text-xl sm:text-2xl text-red-500 glow-text mb-1 animate-bounce';
         endIcon.textContent = '🚨 👮‍♂️ 🚨';
-        endSubtitleContainer.className = 'my-3 p-3 bg-red-950/90 border-2 border-red-500 rounded-xl max-w-xs shadow-2xl animate-pulse';
-        endSubtitle.innerHTML = '¡DETENIDO POR LA POLICÍA! 🚔<br><br><span class="text-yellow-300">CARGOS:</span> Exceso de marcha, resistencia a envejecer y retrasar la fiesta de tus 50.<br><br><span class="text-white text-[8px]">¡A comisaría sin cerveza! 🍺❌</span>';
-        endSubtitle.className = 'text-[10px] text-red-300 leading-relaxed font-bold tracking-wide';
-        infoBox.classList.add('hidden'); // Ocultar datos de la fiesta al perder
+        endSubtitleContainer.className = 'my-2 p-2.5 bg-red-950/90 border-2 border-red-500 rounded-xl w-full max-w-xs shadow-2xl animate-pulse';
+        endSubtitle.innerHTML = '¡DETENIDO POR LA POLICÍA! 🚔<br><br><span class="text-yellow-300">CARGOS:</span> Exceso de marcha, resistencia a envejecer y retrasar la fiesta de tus 50.<br><br><span class="text-white text-[7px]">¡A comisaría sin cerveza! 🍺❌</span>';
+        endSubtitle.className = 'text-[8px] sm:text-[9px] text-red-300 leading-relaxed font-bold tracking-wide';
+        infoBox.classList.add('hidden');
       }
 
       endOverlay.classList.remove('hidden');
     }
 
-    // Event Listeners y Controles
     document.getElementById('start-game-btn').addEventListener('click', () => {
       startGame();
     });
@@ -727,7 +725,6 @@
 
     document.getElementById('close-wrong-exit').addEventListener('click', () => {
       wrongExitModal.classList.add('hidden');
-      // Reanudar el juego y la música
       if (!isGameRunning) {
         isGameRunning = true;
         startMusic();
@@ -743,7 +740,6 @@
       else if (isGameRunning) startMusic();
     });
 
-    // Controles por Teclado
     window.addEventListener('keydown', e => {
       if (!isGameRunning) return;
       switch (e.key) {
@@ -770,16 +766,13 @@
       }
     });
 
-    // Controles Táctiles en Pantalla
     document.getElementById('btn-up').addEventListener('click', () => setDirection(0, -1));
     document.getElementById('btn-down').addEventListener('click', () => setDirection(0, 1));
     document.getElementById('btn-left').addEventListener('click', () => setDirection(-1, 0));
     document.getElementById('btn-right').addEventListener('click', () => setDirection(1, 0));
 
-    // Responsive Canvas
     window.addEventListener('resize', resizeCanvas);
 
-    // Inicialización al cargar la ventana
     window.onload = function () {
       resizeCanvas();
     };
