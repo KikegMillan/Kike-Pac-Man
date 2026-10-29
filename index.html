@@ -55,6 +55,22 @@
       text-shadow: 0 0 8px currentColor;
     }
 
+    /* Estilos Neón Cyberpunk / Retro Arcade para Botones Direccionales */
+    .neon-btn {
+      background: linear-gradient(180deg, #18182b 0%, #0a0a16 100%);
+      border: 2px solid #06b6d4;
+      box-shadow: 0 0 10px rgba(6, 182, 212, 0.4), inset 0 0 8px rgba(6, 182, 212, 0.2);
+      text-shadow: 0 0 8px currentColor;
+      transition: all 0.08s ease-in-out;
+    }
+
+    .neon-btn:active {
+      transform: scale(0.94) translateY(2px);
+      box-shadow: 0 0 15px rgba(236, 72, 153, 0.8), inset 0 0 12px rgba(236, 72, 153, 0.5);
+      border-color: #ec4899;
+      color: #ec4899 !important;
+    }
+
     /* Prevenir scroll rebotado en iOS */
     .no-scroll {
       overscroll-behavior: none;
@@ -95,66 +111,82 @@
           ENTENDIDO 🆗
         </button>
       </div>
-    </div>
 
-    <!-- Controles Táctiles (D-Pad Trazado Compacto Tocado al Canvas) -->
-    <div class="w-full flex items-center justify-center pt-1 z-10 shrink-0">
-      <div class="grid grid-cols-3 gap-1 w-32 h-32 sm:w-40 sm:h-40">
-        <div></div>
-        <button id="btn-up" class="bg-blue-600 active:bg-blue-800 text-white font-bold text-base sm:text-lg rounded-lg flex items-center justify-center retro-btn">▲</button>
-        <div></div>
-        <button id="btn-left" class="bg-blue-600 active:bg-blue-800 text-white font-bold text-base sm:text-lg rounded-lg flex items-center justify-center retro-btn">◄</button>
-        <div class="bg-gray-900 rounded-lg border border-blue-500/30 flex items-center justify-center text-[9px]">🎮</div>
-        <button id="btn-right" class="bg-blue-600 active:bg-blue-800 text-white font-bold text-base sm:text-lg rounded-lg flex items-center justify-center retro-btn">►</button>
-        <div></div>
-        <button id="btn-down" class="bg-blue-600 active:bg-blue-800 text-white font-bold text-base sm:text-lg rounded-lg flex items-center justify-center retro-btn">▼</button>
-        <div></div>
-      </div>
-    </div>
-
-    <!-- Overlay Pantalla de Inicio -->
-    <div id="start-overlay" class="absolute inset-0 bg-black/95 flex flex-col items-center justify-around p-4 z-40 text-center safe-padding">
-      <div class="mt-2">
-        <h1 class="text-xl sm:text-2xl text-yellow-400 glow-text mb-1">KIKE 50th</h1>
-        <p class="text-[8px] sm:text-[10px] text-blue-400 tracking-widest">ANNIVERSARY ARCADE</p>
-      </div>
-
-      <!-- Avatar Preview -->
-      <div class="my-1 p-2.5 bg-gray-900/90 border-2 border-yellow-500/50 rounded-xl w-full max-w-xs">
-        <div class="text-3xl mb-1">👨‍🦲🍺</div>
-        <p class="text-[8px] sm:text-[9px] text-gray-300 leading-relaxed">
-          ¡Consigue al menos 1 <span class="text-yellow-400">cerveza 🍺</span> para animar a Kike y huye de los <span class="text-blue-400">policías 👮</span> por la salida correcta!
-        </p>
-      </div>
-
-      <button id="start-game-btn" class="w-full max-w-xs py-3.5 bg-yellow-400 text-black font-bold text-xs sm:text-sm rounded-xl retro-btn glow-text animate-pulse">
-        ¡EMPEZAR FIESTA!
-      </button>
-    </div>
-
-    <!-- Overlay Pantalla Fin de Juego (Victoria / Game Over) -->
-    <div id="end-overlay" class="hidden absolute inset-0 bg-black/95 flex flex-col items-center justify-between p-4 z-40 text-center overflow-y-auto safe-padding">
-      <div class="mt-2 w-full flex flex-col items-center">
-        <h2 id="end-title" class="text-xl sm:text-2xl text-yellow-400 glow-text mb-1">¡VICTORIA!</h2>
-        <!-- Contenedor del mensaje dinámico con efectos -->
-        <div id="end-subtitle-container" class="my-2 p-2.5 bg-red-950/80 border-2 border-red-500/80 rounded-xl w-full max-w-xs shadow-lg">
-          <div id="end-icon" class="text-3xl mb-1">🚨👮‍♂️🚔</div>
-          <p id="end-subtitle" class="text-[8px] sm:text-[9px] text-red-400 leading-relaxed font-bold tracking-wider"></p>
+      <!-- Overlay Pantalla de Inicio (Centrada y acotada únicamente al área del Canvas) -->
+      <div id="start-overlay" class="absolute inset-0 bg-black/95 flex flex-col items-center justify-center p-3 z-40 text-center gap-2">
+        <div>
+          <h1 class="text-lg sm:text-xl text-yellow-400 glow-text mb-0.5">KIKE 50th</h1>
+          <p class="text-[7px] sm:text-[9px] text-blue-400 tracking-widest">ANNIVERSARY ARCADE</p>
         </div>
+
+        <!-- Avatar Preview -->
+        <div class="p-2 bg-gray-900/90 border border-yellow-500/50 rounded-lg w-full max-w-xs">
+          <div class="text-2xl mb-1">👨‍🦲🍺</div>
+          <p class="text-[7.5px] sm:text-[8.5px] text-gray-300 leading-tight">
+            ¡Consigue al menos 1 <span class="text-yellow-400 font-bold">cerveza 🍺</span> para animar a Kike y huye de los <span class="text-blue-400 font-bold">policías 👮</span> por la salida correcta!
+          </p>
+        </div>
+
+        <button id="start-game-btn" class="w-full max-w-xs py-2.5 bg-yellow-400 text-black font-bold text-xs rounded-lg retro-btn glow-text animate-pulse">
+          ¡EMPEZAR FIESTA!
+        </button>
       </div>
 
-      <div id="info-box" class="w-full max-w-xs p-3 bg-gray-900 border-2 border-yellow-400 rounded-xl text-left space-y-1.5 text-[8px] sm:text-[9px] leading-relaxed my-1">
-        <p class="text-yellow-300 font-bold text-center text-[10px] mb-1">📍 DATOS DE LA FIESTA 📍</p>
-        <p>📅 <strong>Fecha:</strong> Sábado, 50 Aniversario</p>
-        <p>⏰ <strong>Hora:</strong> 21:00h</p>
-        <p>🏢 <strong>Lugar Secreto:</strong> Sala VIP Club Arcade</p>
-        <p>👗 <strong>Dress Code:</strong> Ochentero / Retro</p>
-        <p class="text-gray-400 text-[7px] pt-1 text-center">¡Prepara las ganas de celebrar!</p>
-      </div>
+      <!-- Overlay Pantalla Fin de Juego (Victoria / Game Over) acotada estrictamente al área del Canvas -->
+      <div id="end-overlay" class="hidden absolute inset-0 bg-black/95 flex flex-col items-center justify-center p-3 z-40 text-center gap-2 overflow-y-auto">
+        <div class="w-full flex flex-col items-center">
+          <h2 id="end-title" class="text-lg sm:text-xl text-yellow-400 glow-text mb-0.5">¡VICTORIA!</h2>
+          <div id="end-subtitle-container" class="my-0.5 p-1.5 bg-red-950/80 border border-red-500/80 rounded-lg w-full max-w-xs shadow-lg">
+            <div id="end-icon" class="text-2xl mb-0.5">🚨👮‍♂️🚔</div>
+            <p id="end-subtitle" class="text-[7.5px] sm:text-[8.5px] text-red-400 leading-tight font-bold tracking-wide"></p>
+          </div>
+        </div>
 
-      <button id="restart-btn" class="w-full max-w-xs py-3 bg-yellow-400 text-black font-bold text-xs sm:text-sm rounded-xl retro-btn glow-text my-1">
-        VOLVER A JUGAR 🔄
-      </button>
+        <div id="info-box" class="w-full max-w-xs p-1.5 bg-gray-900 border border-yellow-400 rounded-lg text-left space-y-0.5 text-[7px] leading-tight">
+          <p class="text-yellow-300 font-bold text-center text-[8px] mb-0.5">📍 DATOS DE LA FIESTA 📍</p>
+          <p>📅 <strong>Fecha:</strong> Sábado, 50 Aniversario</p>
+          <p>⏰ <strong>Hora:</strong> 21:00h</p>
+          <p>🏢 <strong>Lugar Secreto:</strong> Sala VIP Club Arcade</p>
+          <p>👗 <strong>Dress Code:</strong> Retro / Ochentero</p>
+        </div>
+
+        <button id="restart-btn" class="w-full max-w-xs py-2 bg-yellow-400 text-black font-bold text-xs rounded-lg retro-btn glow-text">
+          VOLVER A JUGAR 🔄
+        </button>
+      </div>
+    </div>
+
+    <!-- Controles Táctiles (Botonera Horizontal Neón Cyberpunk Proporcional) -->
+    <div class="w-full flex items-center justify-center pt-2 pb-1 z-10 shrink-0 px-3">
+      <div class="flex w-full max-w-sm justify-between items-center gap-2">
+        <!-- IZQUIERDA -->
+        <button id="btn-left" class="flex-1 h-14 sm:h-16 neon-btn text-cyan-400 font-extrabold text-2xl rounded-xl flex items-center justify-center">
+          <svg class="w-7 h-7 drop-shadow-[0_0_6px_currentColor]" fill="currentColor" viewBox="0 0 24 24">
+            <path d="M15.41 16.59L10.83 12l4.58-4.59L14 6l-6 6 6 6 1.41-1.41z"/>
+          </svg>
+        </button>
+
+        <!-- ABAJO -->
+        <button id="btn-down" class="flex-1 h-14 sm:h-16 neon-btn text-cyan-400 font-extrabold text-2xl rounded-xl flex items-center justify-center">
+          <svg class="w-7 h-7 drop-shadow-[0_0_6px_currentColor]" fill="currentColor" viewBox="0 0 24 24">
+            <path d="M7.41 8.59L12 13.17l4.59-4.58L18 10l-6 6-6-6 1.41-1.41z"/>
+          </svg>
+        </button>
+
+        <!-- ARRIBA -->
+        <button id="btn-up" class="flex-1 h-14 sm:h-16 neon-btn text-cyan-400 font-extrabold text-2xl rounded-xl flex items-center justify-center">
+          <svg class="w-7 h-7 drop-shadow-[0_0_6px_currentColor]" fill="currentColor" viewBox="0 0 24 24">
+            <path d="M7.41 15.41L12 10.83l4.59 4.58L18 14l-6-6-6 6 1.41 1.41z"/>
+          </svg>
+        </button>
+
+        <!-- DERECHA -->
+        <button id="btn-right" class="flex-1 h-14 sm:h-16 neon-btn text-cyan-400 font-extrabold text-2xl rounded-xl flex items-center justify-center">
+          <svg class="w-7 h-7 drop-shadow-[0_0_6px_currentColor]" fill="currentColor" viewBox="0 0 24 24">
+            <path d="M8.59 16.59L13.17 12 8.59 7.41 10 6l6 6-6 6-1.41-1.41z"/>
+          </svg>
+        </button>
+      </div>
     </div>
 
   </div>
@@ -286,8 +318,8 @@
       
       // Calculate available height taking headers and controls into account
       const headerH = document.querySelector('#game-container > div:first-child')?.offsetHeight || 40;
-      const controlsH = document.querySelector('#game-container > div:nth-child(3)')?.offsetHeight || 130;
-      const maxH = window.innerHeight - headerH - controlsH - 24;
+      const controlsH = document.querySelector('#game-container > div:nth-child(3)')?.offsetHeight || 80;
+      const maxH = window.innerHeight - headerH - controlsH - 20;
 
       const size = Math.max(180, Math.min(maxW, maxH));
       canvas.width = size;
@@ -695,20 +727,20 @@
       if (isWin) {
         playSound(880, 0.4);
         endTitle.textContent = '¡VICTORIA!';
-        endTitle.className = 'text-xl sm:text-2xl text-yellow-400 glow-text mb-1';
+        endTitle.className = 'text-lg sm:text-xl text-yellow-400 glow-text mb-0.5';
         endIcon.textContent = '🎉🍻🕺';
-        endSubtitleContainer.className = 'my-2 p-2.5 bg-green-950/80 border-2 border-green-500/80 rounded-xl w-full max-w-xs shadow-lg';
+        endSubtitleContainer.className = 'my-0.5 p-1.5 bg-green-950/80 border border-green-500/80 rounded-lg w-full max-w-xs shadow-lg';
         endSubtitle.textContent = '¡BRUTAL KIKE! HAS ESCAPADO CON TU CERVEZA Y DESBLOQUEADO LA CELEBRACIÓN DE TUS 50';
-        endSubtitle.className = 'text-[8px] sm:text-[9px] text-green-300 leading-relaxed font-bold tracking-wide';
+        endSubtitle.className = 'text-[7.5px] sm:text-[8.5px] text-green-300 leading-tight font-bold tracking-wide';
         infoBox.classList.remove('hidden');
       } else {
         playSound(150, 0.5);
         endTitle.textContent = 'GAME OVER';
-        endTitle.className = 'text-xl sm:text-2xl text-red-500 glow-text mb-1 animate-bounce';
+        endTitle.className = 'text-lg sm:text-xl text-red-500 glow-text mb-0.5 animate-bounce';
         endIcon.textContent = '🚨 👮‍♂️ 🚨';
-        endSubtitleContainer.className = 'my-2 p-2.5 bg-red-950/90 border-2 border-red-500 rounded-xl w-full max-w-xs shadow-2xl animate-pulse';
-        endSubtitle.innerHTML = '¡DETENIDO POR LA POLICÍA! 🚔<br><br><span class="text-yellow-300">CARGOS:</span> Exceso de marcha, resistencia a envejecer y retrasar la fiesta de tus 50.<br><br><span class="text-white text-[7px]">¡A comisaría sin cerveza! 🍺❌</span>';
-        endSubtitle.className = 'text-[8px] sm:text-[9px] text-red-300 leading-relaxed font-bold tracking-wide';
+        endSubtitleContainer.className = 'my-0.5 p-1.5 bg-red-950/90 border border-red-500 rounded-lg w-full max-w-xs shadow-2xl animate-pulse';
+        endSubtitle.innerHTML = '¡DETENIDO POR LA POLICÍA! 🚔<br><br><span class="text-yellow-300">CARGOS:</span> Exceso de marcha, resistencia a envejecer y retrasar la fiesta de tus 50.<br><span class="text-white text-[6.5px]">¡A comisaría sin cerveza! 🍺❌</span>';
+        endSubtitle.className = 'text-[7.5px] sm:text-[8.5px] text-red-300 leading-tight font-bold tracking-wide';
         infoBox.classList.add('hidden');
       }
 
