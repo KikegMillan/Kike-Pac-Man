@@ -290,7 +290,7 @@
         const gain = audioCtx.createGain();
         osc.type = type;
         osc.frequency.setValueAtTime(freq, audioCtx.currentTime);
-        gain.gain.setValueAtTime(0.08, audioCtx.currentTime);
+        gain.gain.setValueAtTime(0.22, audioCtx.currentTime);
         gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + duration);
         osc.connect(gain);
         gain.connect(audioCtx.destination);
@@ -306,7 +306,7 @@
       let step = 0;
       musicInterval = setInterval(() => {
         if (!isGameRunning || isMuted) return;
-        playSound(notes[step % notes.length], 0.1, 'triangle');
+        playSound(notes[step % notes.length], 0.12, 'triangle');
         step++;
       }, 250);
     }
@@ -316,6 +316,119 @@
         clearInterval(musicInterval);
         musicInterval = null;
       }
+    }
+
+    // Efecto animado y más largo para las super píldoras
+    function playPillSound() {
+      if (isMuted || !audioCtx) return;
+      try {
+        const notes = [523.25, 659.25, 783.99, 1046.50, 1318.51]; // C5, E5, G5, C6, E6
+        notes.forEach((freq, idx) => {
+          const osc = audioCtx.createOscillator();
+          const gain = audioCtx.createGain();
+          osc.type = 'triangle';
+          osc.frequency.setValueAtTime(freq, audioCtx.currentTime + idx * 0.08);
+          gain.gain.setValueAtTime(0.3, audioCtx.currentTime + idx * 0.08);
+          gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + idx * 0.08 + 0.15);
+          osc.connect(gain);
+          gain.connect(audioCtx.destination);
+          osc.start(audioCtx.currentTime + idx * 0.08);
+          osc.stop(audioCtx.currentTime + idx * 0.08 + 0.15);
+        });
+      } catch (e) {}
+    }
+
+    // Efecto triunfal, super animado y festivo cuando Kike coge una cerveza
+    function playBeerSound() {
+      if (isMuted || !audioCtx) return;
+      try {
+        // Secuencia dinámica y alegre con trino brillante final
+        const fanfare = [
+          { f: 523.25, d: 0.07, t: 0, type: 'square' },     // C5
+          { f: 659.25, d: 0.07, t: 0.07, type: 'square' },  // E5
+          { f: 783.99, d: 0.07, t: 0.14, type: 'square' },  // G5
+          { f: 1046.50, d: 0.09, t: 0.21, type: 'square' }, // C6
+          { f: 880.00, d: 0.07, t: 0.30, type: 'square' },  // A5
+          { f: 1046.50, d: 0.07, t: 0.37, type: 'square' }, // C6
+          { f: 1318.51, d: 0.35, t: 0.44, type: 'triangle' } // E6 (Trino festivo)
+        ];
+        fanfare.forEach(note => {
+          const osc = audioCtx.createOscillator();
+          const gain = audioCtx.createGain();
+          osc.type = note.type;
+          osc.frequency.setValueAtTime(note.f, audioCtx.currentTime + note.t);
+          gain.gain.setValueAtTime(0.35, audioCtx.currentTime + note.t);
+          gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + note.t + note.d);
+          osc.connect(gain);
+          gain.connect(audioCtx.destination);
+          osc.start(audioCtx.currentTime + note.t);
+          osc.stop(audioCtx.currentTime + note.t + note.d);
+        });
+      } catch (e) {}
+    }
+
+    // Sonido de error/puerta equivocada
+    function playWrongExitSound() {
+      if (isMuted || !audioCtx) return;
+      const notes = [180, 140, 100];
+      notes.forEach((freq, i) => {
+        setTimeout(() => {
+          playSound(freq, 0.18, 'sawtooth');
+        }, i * 120);
+      });
+    }
+
+    // 2. Melodía triste para cuando te pilla la policía
+    function playSadGameOverMelody() {
+      if (isMuted || !audioCtx) return;
+      // Secuencia melódica descendente en tono menor
+      const melody = [
+        { f: 392.00, d: 0.35 }, // G4
+        { f: 369.99, d: 0.35 }, // F#4
+        { f: 349.23, d: 0.35 }, // F4
+        { f: 329.63, d: 0.60 }, // E4
+        { f: 261.63, d: 0.40 }, // C4
+        { f: 220.00, d: 0.40 }, // A3
+        { f: 196.00, d: 0.90 }  // G3 (nota triste sostenida)
+      ];
+
+      let timeOffset = 0;
+      melody.forEach(note => {
+        setTimeout(() => {
+          playSound(note.f, note.d, 'sawtooth');
+        }, timeOffset * 1000);
+        timeOffset += note.d;
+      });
+    }
+
+    // 3. Melodía animada y heroica de victoria (duración ~5.5 segundos)
+    function playHeroicVictoryMelody() {
+      if (isMuted || !audioCtx) return;
+      // Fanfarria triunfal de 8 compases
+      const melody = [
+        // Intro heroica
+        { f: 261.63, d: 0.2 }, { f: 329.63, d: 0.2 }, { f: 392.00, d: 0.2 }, { f: 523.25, d: 0.4 }, // C4, E4, G4, C5
+        { f: 392.00, d: 0.2 }, { f: 523.25, d: 0.6 },                                            // G4, C5
+        
+        // Frase principal de triunfo
+        { f: 440.00, d: 0.25 }, { f: 493.88, d: 0.25 }, { f: 523.25, d: 0.25 }, { f: 587.33, d: 0.25 }, // A4, B4, C5, D5
+        { f: 659.25, d: 0.5 },  { f: 587.33, d: 0.25 }, { f: 659.25, d: 0.5 },                          // E5, D5, E5
+        
+        // Arpegio ascensional
+        { f: 523.25, d: 0.2 }, { f: 659.25, d: 0.2 }, { f: 783.99, d: 0.2 }, { f: 880.00, d: 0.2 },   // C5, E5, G5, A5
+        { f: 987.77, d: 0.3 },                                                                        // B5
+
+        // Cierre épico sostenido
+        { f: 1046.50, d: 1.2 }                                                                        // C6 (Victoria Final)
+      ];
+
+      let timeOffset = 0;
+      melody.forEach(note => {
+        setTimeout(() => {
+          playSound(note.f, note.d, 'square');
+        }, timeOffset * 1000);
+        timeOffset += note.d;
+      });
     }
 
     // Ajuste dinámico de pantalla optimizado para eliminar huecos verticales arriba y abajo
@@ -484,7 +597,7 @@
             score += 50;
             frightenedTimer = 8;
             scoreVal.textContent = score;
-            playSound(900, 0.2);
+            playPillSound();
           } else if (tile === 3) {
             grid[player.gridY][player.gridX] = 4;
             beersCollected++;
@@ -493,7 +606,7 @@
             beerIndicator.classList.remove('opacity-40');
             score += 100;
             scoreVal.textContent = score;
-            playSound(1200, 0.3);
+            playBeerSound();
           } else if (tile === 8 || tile === 9) {
             if (!player.hasBeer) {
               // Sin cerveza: Mensaje obligatorio de traer al menos una cerveza
@@ -507,6 +620,7 @@
 
               isGameRunning = false;
               stopMusic();
+              playWrongExitSound(); // Sonido de error al intentar salir sin cerveza
               wrongExitModal.classList.remove('hidden');
             } else if (tile === 8) {
               // Con cerveza pero puerta incorrecta
@@ -520,6 +634,7 @@
 
               isGameRunning = false;
               stopMusic();
+              playWrongExitSound(); // Sonido de error al intentar salir por puerta equivocada
               wrongExitModal.classList.remove('hidden');
             } else if (tile === 9) {
               // Con cerveza y puerta correcta: Victoria
@@ -732,7 +847,7 @@
       const endSubtitleContainer = document.getElementById('end-subtitle-container');
 
       if (isWin) {
-        playSound(880, 0.4);
+        playHeroicVictoryMelody(); // Fanfarria heroica de victoria (~5.5 seg)
         endTitle.textContent = '¡VICTORIA!';
         endTitle.className = 'text-lg sm:text-xl text-yellow-400 glow-text mb-0.5';
         endIcon.textContent = '🎉🍻🕺';
@@ -741,7 +856,7 @@
         endSubtitle.className = 'text-[7.5px] sm:text-[8.5px] text-green-300 leading-tight font-bold tracking-wide';
         infoBox.classList.remove('hidden');
       } else {
-        playSound(150, 0.5);
+        playSadGameOverMelody(); // Melodía triste de derrota cuando atrapan a Kike
         endTitle.textContent = 'GAME OVER';
         endTitle.className = 'text-lg sm:text-xl text-red-500 glow-text mb-0.5 animate-bounce';
         endIcon.textContent = '🚨 👮‍♂️ 🚨';
